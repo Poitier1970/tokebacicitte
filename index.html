@@ -4,58 +4,36 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#003da5">
+<meta name="theme-color" content="#14223f">
 <title>Tokébac Icitte</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,800&family=JetBrains+Mono:wght@500&display=swap">
 <style>
-/* La page est le drapeau : champ bleu, croix blanche, quatre fleurs de lis; le titre occupe le cœur de la croix. */
-:root{--bleu:#003da5;--bleu-nuit:#002a73;--blanc:#ffffff;--bar:clamp(64px,13vmin,150px);color-scheme:light}
+/* Le drapeau Carillon-Sacré-Cœur au centre, comme un étendard; le nom dessous, sur fond de nuit bleue. */
+:root{--nuit:#14223f;--nuit2:#0c1528;--blanc:#f4efe2;--or:#e6b93a;--bleu:#4f78c4;color-scheme:dark}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
-body{background:var(--bleu);color:var(--blanc);overflow:hidden;font-family:"JetBrains Mono",ui-monospace,Consolas,monospace}
-.flag{position:fixed;inset:0;background:radial-gradient(ellipse at 30% 20%,rgba(255,255,255,.08),transparent 60%),linear-gradient(160deg,var(--bleu),var(--bleu-nuit))}
-.bar{position:absolute;background:var(--blanc)}
-.bar.h{left:0;right:0;top:50%;height:var(--bar);transform:translateY(-50%)}
-.bar.v{top:0;bottom:0;left:50%;width:var(--bar);transform:translateX(-50%)}
-.lis{position:absolute;width:min(17vw,17vh,170px);aspect-ratio:1;transform:translate(-50%,-50%);opacity:0;animation:pop .9s cubic-bezier(.2,.8,.2,1) forwards}
-.lis svg{width:100%;height:100%;display:block}
-.lis.l1{left:25%;top:25%;animation-delay:.15s}
-.lis.l2{left:75%;top:25%;animation-delay:.3s}
-.lis.l3{left:25%;top:75%;animation-delay:.45s}
-.lis.l4{left:75%;top:75%;animation-delay:.6s}
-@keyframes pop{from{opacity:0;transform:translate(-50%,-40%) scale(.9)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
-.coeur{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);background:var(--blanc);color:var(--bleu);padding:clamp(18px,4vmin,40px) clamp(22px,5vmin,56px);text-align:center;display:flex;flex-direction:column;align-items:center;gap:clamp(8px,1.6vmin,16px);max-width:calc(100vw - 32px);box-shadow:0 0 0 clamp(6px,1.2vmin,12px) var(--blanc)}
-h1{font-family:"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif;font-weight:800;font-size:clamp(2.4rem,9vmin,6.5rem);line-height:.92;letter-spacing:-.03em;margin:0;white-space:nowrap}
-p{margin:0;font-size:clamp(.7rem,1.9vmin,.95rem);letter-spacing:.2em;text-transform:uppercase;font-weight:500;white-space:nowrap;display:flex;align-items:center;gap:10px}
-p::before,p::after{content:"";width:22px;height:2px;background:currentColor;opacity:.6}
-@media (max-width:520px){h1{white-space:normal;font-size:clamp(2.3rem,13vw,3.4rem)}}
-@media (prefers-reduced-motion:reduce){.lis{animation:none;opacity:1}}
+body{background:radial-gradient(ellipse at 50% 35%,#1f3360,var(--nuit) 55%,var(--nuit2));color:var(--blanc);display:flex;align-items:center;justify-content:center;padding:24px;font-family:"JetBrains Mono",ui-monospace,Consolas,monospace;min-height:100%}
+main{display:flex;flex-direction:column;align-items:center;gap:clamp(18px,3.5vh,34px);width:100%;max-width:980px}
+figure{margin:0;width:min(100%,calc(62vh * 1.244));animation:lever 1.4s cubic-bezier(.2,.8,.2,1) both}
+figure img{display:block;width:100%;height:auto;border-radius:3px;box-shadow:0 0 0 1px rgba(230,185,58,.5),0 30px 80px -20px rgba(0,0,0,.7),0 0 120px -30px rgba(230,185,58,.35)}
+.titre{display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;animation:lever 1.4s .35s cubic-bezier(.2,.8,.2,1) both}
+h1{font-family:"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif;font-weight:800;font-size:clamp(2.4rem,8vmin,5.5rem);line-height:.95;letter-spacing:-.03em;margin:0}
+h1 span{color:var(--or)}
+p{margin:0;font-size:clamp(.7rem,1.8vmin,.92rem);letter-spacing:.22em;text-transform:uppercase;color:var(--or);display:flex;align-items:center;gap:12px;white-space:nowrap}
+p::before,p::after{content:"";width:28px;height:1px;background:currentColor;opacity:.7}
+@keyframes lever{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){figure,.titre{animation:none}}
 </style>
 </head>
 <body>
-<div class="flag" aria-hidden="true">
-  <svg width="0" height="0" style="position:absolute">
-    <symbol id="fleur" viewBox="0 0 100 100">
-      <g fill="#fff">
-        <path d="M50 4 C61 18 66 34 57 56 L43 56 C34 34 39 18 50 4 Z"/>
-        <path id="petale" d="M44 58 C28 59 12 51 8 36 C5 24 16 15 25 21 C32 26 30 37 21 37 C25 47 34 52 44 51 Z"/>
-        <use href="#petale" transform="translate(100 0) scale(-1 1)"/>
-        <rect x="29" y="55" width="42" height="9" rx="2"/>
-        <path d="M43 64 C41 74 35 78 29 76 C33 85 44 86 50 75 C56 86 67 85 71 76 C65 78 59 74 57 64 Z"/>
-      </g>
-    </symbol>
-  </svg>
-  <div class="bar h"></div><div class="bar v"></div>
-  <div class="lis l1"><svg><use href="#fleur"/></svg></div>
-  <div class="lis l2"><svg><use href="#fleur"/></svg></div>
-  <div class="lis l3"><svg><use href="#fleur"/></svg></div>
-  <div class="lis l4"><svg><use href="#fleur"/></svg></div>
-</div>
-<main class="coeur">
-  <h1>Tokébac Icitte.</h1>
-  <p>Site sous construction</p>
+<main>
+  <figure><img src="carillon.jpg" width="1024" height="823" alt="Le drapeau Carillon-Sacré-Cœur : croix blanche sur fond bleu, quatre fleurs de lys blanches pointant vers le centre, Sacré-Cœur entouré de feuilles d'érable, bordure dorée"></figure>
+  <div class="titre">
+    <h1>Tokébac Icitte<span>.</span></h1>
+    <p>Site sous construction</p>
+  </div>
 </main>
 </body>
 </html>

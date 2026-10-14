@@ -4,139 +4,40 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
-<meta name="theme-color" content="#111111">
+<meta name="theme-color" content="#e9e3d6">
 <title>Tokébac Icitte</title>
+<link rel="preload" as="image" href="accueil.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@600;700&family=Cormorant+Garamond:ital,wght@1,600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap">
 <style>
-/* Une toile peinte à la spatule, en mosaïque dense de couleurs pures, à la manière des grandes toiles abstraites des années 1950; le nom repose dans une plage de blanc épais au centre. */
-:root{--noir:#111111;--encre:#141414;color-scheme:dark}
+/* Un atelier baigné de lumière; le tableau sur son chevalet; le nom posé dans le grand ciel pâle du tableau, en capitales classiques. */
+:root{--ciel-encre:#2b3a52;--terre:#5a4632;--lin:#e9e3d6;color-scheme:light}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
-body{background:var(--noir);color:var(--encre);overflow:hidden;font-family:"Cormorant Garamond",Garamond,"Times New Roman",serif}
-canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
-main{position:relative;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(6px,1.4vh,14px);text-align:center;padding:24px;pointer-events:none}
-h1{font-family:"Cormorant SC","Cormorant Garamond",Garamond,serif;font-weight:700;font-size:clamp(2.6rem,9vmin,6.6rem);line-height:.95;letter-spacing:.04em;margin:0;color:var(--encre);opacity:0;animation:paraitre 1.4s 1.6s ease forwards}
-p{margin:0;opacity:0;animation:paraitre 1.4s 2s ease forwards}
-.devise{font-style:italic;font-weight:600;font-size:clamp(1.05rem,2.6vmin,1.5rem);color:#7a1d17}
-.etat{font-family:"Cormorant SC",Garamond,serif;font-weight:600;font-size:clamp(.82rem,1.9vmin,1.05rem);letter-spacing:.3em;color:#173c86}
-@keyframes paraitre{to{opacity:1}}
-@media (prefers-reduced-motion:reduce){h1,p{animation:none;opacity:1}}
+body{background:var(--lin);overflow:hidden;font-family:"Cormorant Garamond",Garamond,"Times New Roman",serif}
+.scene{position:fixed;inset:0;background:url("accueil.jpg") 52% 45% / cover no-repeat var(--lin);animation:ouvrir 2.4s ease both}
+.lumiere{position:fixed;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,250,235,.0) 35%,rgba(255,250,235,.18) 50%,rgba(255,250,235,0) 65%);mix-blend-mode:soft-light}
+main{position:fixed;left:50%;top:clamp(56px,19vh,170px);transform:translateX(-50%);width:min(92vw,880px);display:flex;flex-direction:column;align-items:center;gap:clamp(4px,1vh,10px);text-align:center}
+h1{font-family:"Cormorant SC","Cormorant Garamond",Garamond,serif;font-weight:600;font-size:clamp(2.2rem,7.2vmin,5.2rem);line-height:1;letter-spacing:.08em;margin:0;color:var(--ciel-encre);mix-blend-mode:multiply;opacity:.9;animation:poser 2s .6s ease both}
+.filet{width:clamp(60px,10vw,120px);height:1px;background:var(--ciel-encre);opacity:.45;animation:poser 2s 1s ease both}
+.devise{margin:0;font-style:italic;font-weight:500;font-size:clamp(1rem,2.3vmin,1.35rem);color:var(--terre);mix-blend-mode:multiply;animation:poser 2s 1.2s ease both}
+.etat{margin:0;font-family:"Cormorant SC",Garamond,serif;font-weight:500;font-size:clamp(.78rem,1.7vmin,.98rem);letter-spacing:.32em;color:var(--ciel-encre);opacity:.75;animation:poser 2s 1.4s ease both}
+@keyframes ouvrir{from{opacity:0;transform:scale(1.03)}to{opacity:1;transform:none}}
+@keyframes poser{from{opacity:0;filter:blur(3px)}to{filter:none}}
+@media (prefers-reduced-motion:reduce){.scene,h1,.filet,.devise,.etat{animation:none}}
+@media (max-aspect-ratio:3/4){main{top:clamp(48px,12vh,120px)}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 </head>
 <body>
-<canvas id="toile" aria-hidden="true"></canvas>
+<div class="scene" role="img" aria-label="Un tableau sur un chevalet, dans un atelier lumineux : une grève du fleuve, trois personnages solitaires sous un grand ciel pâle, dans l'esprit de Jean-Paul Lemieux."></div>
+<div class="lumiere" aria-hidden="true"></div>
 <main>
-  <p class="sr">Fond : une toile abstraite peinte à la spatule, aux couleurs vives, inspirée de Jean Paul Riopelle.</p>
   <h1>Tokébac Icitte</h1>
+  <div class="filet" aria-hidden="true"></div>
   <p class="devise">Je me souviens</p>
   <p class="etat">Site en construction</p>
 </main>
-<script>
-(function(){
-  const cv = document.getElementById('toile'), ctx = cv.getContext('2d');
-  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-  // Hasard reproductible : la même toile à chaque visite
-  let seed = 1923;
-  const R = () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; };
-
-  // Champ de directions doux : donne le rythme des coups de spatule
-  const G = 9; let grid = [];
-  const sm = t => t*t*(3-2*t);
-  function angle(u, v){
-    const x = u*G, y = v*G, i = Math.min(G-1, x|0), j = Math.min(G-1, y|0), fx = sm(x-i), fy = sm(y-j);
-    const a = grid[j*(G+1)+i], b = grid[j*(G+1)+i+1], c = grid[(j+1)*(G+1)+i], d = grid[(j+1)*(G+1)+i+1];
-    return (a*(1-fx)+b*fx)*(1-fy) + (c*(1-fx)+d*fx)*fy;
-  }
-
-  // Palette : bleus et blancs du pays, éclats de rouge, de jaune et de vert, noirs profonds
-  const PAL = [
-    ['#1d4ea6',14],['#2f6fd1',9],['#0e2c66',9],['#5b8fe0',4],
-    ['#f3eee2',14],['#ffffff',6],['#d9d2c0',4],
-    ['#121212',16],['#2a2a2a',5],
-    ['#c8261e',7],['#8f1a14',3],['#e8b51a',6],['#f0d36b',2],
-    ['#2f7a3c',4],['#1e5230',2],['#b5702a',2]
-  ];
-  const TOTAL = PAL.reduce((s,p)=>s+p[1],0);
-  const DOM = ['#1d4ea6','#0e2c66','#f3eee2','#121212','#c8261e','#2f6fd1','#e8b51a','#121212','#1d4ea6','#2f7a3c'];
-  let grid2 = [];
-  function region(u,v){ const i = Math.min(5,(u*6)|0), j = Math.min(5,(v*6)|0); return grid2[j*6+i]; }
-  function pick(){ let r = R()*TOTAL; for (const [c,w] of PAL){ if ((r -= w) < 0) return c; } return PAL[0][0]; }
-  const BLANCS = ['#f3eee2','#ffffff','#ece5d3','#f7f3ea','#e3dccb'];
-
-  function shade(hex, k){
-    const n = parseInt(hex.slice(1),16), r = n>>16, g = n>>8&255, b = n&255;
-    const f = v => Math.max(0, Math.min(255, Math.round(k > 0 ? v + (255-v)*k : v*(1+k))));
-    return `rgb(${f(r)},${f(g)},${f(b)})`;
-  }
-
-  // Un coup de spatule : un trapèze incliné, une arête claire, une arête sombre, des stries
-  function stroke(x, y, len, wid, ang, col){
-    ctx.save(); ctx.translate(x, y); ctx.rotate(ang);
-    const sk = (R()-.5) * wid * .9, l = len/2, w = wid/2;
-    ctx.beginPath();
-    ctx.moveTo(-l, -w + sk*.3); ctx.lineTo(l + sk, -w); ctx.lineTo(l, w); ctx.lineTo(-l - sk*.5, w + sk*.2); ctx.closePath();
-    ctx.fillStyle = col; ctx.fill();
-    ctx.lineWidth = Math.max(.8, wid*.09);
-    ctx.strokeStyle = shade(col, .35); ctx.beginPath(); ctx.moveTo(-l, -w + sk*.3); ctx.lineTo(l + sk, -w); ctx.stroke();
-    ctx.strokeStyle = shade(col, -.45); ctx.beginPath(); ctx.moveTo(l, w); ctx.lineTo(-l - sk*.5, w + sk*.2); ctx.stroke();
-    if (R() < .55){
-      ctx.globalAlpha = .35; ctx.lineWidth = .7;
-      for (let s = 0; s < 3; s++){
-        const yy = (R()-.5)*wid*.7; ctx.strokeStyle = R()<.5 ? shade(col,.5) : shade(col,-.5);
-        ctx.beginPath(); ctx.moveTo(-l*.8, yy); ctx.lineTo(l*(.3+R()*.6), yy + (R()-.5)*2); ctx.stroke();
-      }
-      ctx.globalAlpha = 1;
-    }
-    ctx.restore();
-  }
-
-  let job = 0;
-  function paint(){
-    const run = ++job;
-    seed = 1923; grid = Array.from({length:(G+1)*(G+1)}, () => R() * Math.PI * 2); grid2 = Array.from({length:36}, () => DOM[(R()*DOM.length)|0]);
-    const dpr = Math.min(devicePixelRatio || 1, 2), W = innerWidth, H = innerHeight;
-    cv.width = W*dpr; cv.height = H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
-    ctx.fillStyle = '#111'; ctx.fillRect(0,0,W,H);
-
-    const unit = Math.max(10, Math.min(W,H) / 30);
-    const cx = W/2, cy = H/2, rx = Math.min(W*.44, 540), ry = Math.min(H*.2, 170);
-    const base = (W*H)/(unit*unit);
-    const jobs = [];
-    [[base*2.2,1.5],[base*3.2,1],[base*2,.65]].forEach(([n,s]) => { for (let i = 0; i < n; i++) jobs.push(s); });
-    const plage = Math.round((rx*ry)/(unit*unit) * 9);
-    for (let i = 0; i < plage; i++) jobs.push(-1);
-
-    let k = 0;
-    const per = reduce ? jobs.length : Math.ceil(jobs.length / 90);
-    function step(){
-      if (run !== job) return;
-      const end = Math.min(jobs.length, k + per);
-      for (; k < end; k++){
-        const s = jobs[k];
-        if (s < 0){
-          const t = R()*Math.PI*2, d = Math.sqrt(R());
-          const edge = 1 + .16*Math.sin(3*t + 1.3) + .1*Math.sin(7*t + .4) + .06*Math.sin(13*t);
-          const x = cx + Math.cos(t)*rx*d*edge, y = cy + Math.sin(t)*ry*d*edge*1.1;
-          stroke(x, y, unit*(1.3+R()*1.8), unit*(.8+R()*.7), (R()-.5)*.9, BLANCS[(R()*BLANCS.length)|0]);
-        } else {
-          const x = R()*W, y = R()*H;
-          const a = angle(x/W, y/H) + (R()-.5)*.9;
-          const dx = (x-cx)/rx, dy = (y-cy)/ry;
-          const col = dx*dx + dy*dy < 1.5 && R() < .5 ? BLANCS[(R()*BLANCS.length)|0] : (R() < .45 ? region(x/W + (R()-.5)*.08, y/H + (R()-.5)*.08) : pick());
-          stroke(x, y, unit*s*(1 + R()*1.2), unit*s*(.7 + R()*.6), a, col);
-        }
-      }
-      if (k < jobs.length) requestAnimationFrame(step);
-    }
-    step();
-  }
-  let t; paint();
-  addEventListener('resize', () => { clearTimeout(t); t = setTimeout(paint, 200); });
-})();
-</script>
 </body>
 </html>

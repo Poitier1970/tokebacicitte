@@ -11,14 +11,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+SC:wght@500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap">
 <style>
-/* Un atelier baigné de lumière; le tableau sur son chevalet; le nom posé dans le grand ciel pâle du tableau, en capitales classiques. */
+/* La toile seule, plein écran; le nom posé dans son grand ciel pâle, en capitales classiques. */
 :root{--ciel-encre:#2b3a52;--terre:#5a4632;--lin:#e9e3d6;color-scheme:light}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 body{background:var(--lin);overflow:hidden;font-family:"Cormorant Garamond",Garamond,"Times New Roman",serif}
-.scene{position:fixed;inset:0;background:url("accueil.jpg") 52% 45% / cover no-repeat var(--lin);animation:ouvrir 2.4s ease both}
-.lumiere{position:fixed;inset:0;pointer-events:none;background:linear-gradient(115deg,rgba(255,250,235,.0) 35%,rgba(255,250,235,.18) 50%,rgba(255,250,235,0) 65%);mix-blend-mode:soft-light}
-main{position:fixed;left:50%;top:clamp(56px,19vh,170px);transform:translateX(-50%);width:min(92vw,880px);display:flex;flex-direction:column;align-items:center;gap:clamp(4px,1vh,10px);text-align:center}
+.scene{position:fixed;inset:0;background:url("accueil.jpg") 45% 40% / cover no-repeat var(--lin);animation:ouvrir 2.4s ease both}
+main{position:fixed;left:50%;top:clamp(48px,13vh,140px);transform:translateX(-50%);width:min(92vw,880px);display:flex;flex-direction:column;align-items:center;gap:clamp(4px,1vh,10px);text-align:center}
 h1{font-family:"Cormorant SC","Cormorant Garamond",Garamond,serif;font-weight:600;font-size:clamp(2.2rem,7.2vmin,5.2rem);line-height:1;letter-spacing:.08em;margin:0;color:var(--ciel-encre);mix-blend-mode:multiply;opacity:.9;animation:poser 2s .6s ease both}
 .filet{width:clamp(60px,10vw,120px);height:1px;background:var(--ciel-encre);opacity:.45;animation:poser 2s 1s ease both}
 .devise{margin:0;font-style:italic;font-weight:500;font-size:clamp(1rem,2.3vmin,1.35rem);color:var(--terre);mix-blend-mode:multiply;animation:poser 2s 1.2s ease both}
@@ -26,13 +25,12 @@ h1{font-family:"Cormorant SC","Cormorant Garamond",Garamond,serif;font-weight:60
 @keyframes ouvrir{from{opacity:0;transform:scale(1.03)}to{opacity:1;transform:none}}
 @keyframes poser{from{opacity:0;filter:blur(3px)}to{filter:none}}
 @media (prefers-reduced-motion:reduce){.scene,h1,.filet,.devise,.etat{animation:none}}
-@media (max-aspect-ratio:3/4){main{top:clamp(48px,12vh,120px)}}
+@media (max-aspect-ratio:3/4){main{top:clamp(48px,12vh,120px)}.scene{background-position:24% 40%}}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 </head>
 <body>
-<div class="scene" role="img" aria-label="Un tableau sur un chevalet, dans un atelier lumineux : une grève du fleuve, trois personnages solitaires sous un grand ciel pâle, dans l'esprit de Jean-Paul Lemieux."></div>
-<div class="lumiere" aria-hidden="true"></div>
+<div class="scene" role="img" aria-label="Une grève du fleuve, trois personnages solitaires sous un grand ciel pâle, dans l'esprit de Jean-Paul Lemieux."></div>
 <main>
   <h1>Tokébac Icitte</h1>
   <div class="filet" aria-hidden="true"></div>

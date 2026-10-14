@@ -10,16 +10,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Cormorant+SC:wght@500;600&display=swap">
 <style>
-/* Le fjord du Saguenay au crépuscule, peint en arrière-plan; le drapeau Carillon-Sacré-Cœur en étendard; le nom gravé en capitales classiques. */
+/* Le drapeau Carillon-Sacré-Cœur se fond dans le ciel du fjord du Saguenay au crépuscule et se reflète dans l'eau; le nom gravé en capitales classiques au-dessus de l'eau. */
 :root{--nuit:#0b1430;--ivoire:#efe6d2;--or:#d9b45a;--or-pale:#e9d39a;color-scheme:dark}
 *{box-sizing:border-box}
 html,body{height:100%;margin:0}
 body{background:var(--nuit);color:var(--ivoire);font-family:"Cormorant Garamond",Garamond,"Times New Roman",serif;overflow-x:hidden}
 canvas#fjord{position:fixed;inset:0;width:100%;height:100%;display:block}
 .voile{position:fixed;inset:0;background:radial-gradient(ellipse at 50% 42%,transparent 30%,rgba(5,9,22,.4) 90%);pointer-events:none}
-main{position:relative;min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:clamp(20px,4vh,40px);padding:32px 20px}
-figure{margin:0;width:min(100%,calc(50vh * 1.244),700px);padding:clamp(8px,1.4vmin,14px);background:linear-gradient(145deg,#3a2c12,#c9a24c 30%,#6b5320 55%,#e2c46f 75%,#4a3816);box-shadow:0 40px 90px -20px rgba(0,0,0,.85),0 0 0 1px rgba(0,0,0,.6);animation:lever 1.8s cubic-bezier(.2,.8,.2,1) both}
-figure img{display:block;width:100%;height:auto;box-shadow:inset 0 0 0 1px rgba(0,0,0,.4)}
+main{position:relative;min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:clamp(20px,4vh,40px);padding:32px 20px max(9vh,48px)}
 .titre{display:flex;flex-direction:column;align-items:center;gap:14px;text-align:center;animation:lever 1.8s .5s cubic-bezier(.2,.8,.2,1) both;text-shadow:0 2px 18px rgba(0,0,0,.8)}
 .orn{display:flex;align-items:center;gap:14px;color:var(--or)}
 .orn::before,.orn::after{content:"";width:clamp(40px,10vw,110px);height:1px;background:linear-gradient(90deg,transparent,var(--or))}
@@ -29,14 +27,15 @@ h1{font-family:"Cormorant SC","Cormorant Garamond",Garamond,serif;font-weight:60
 .devise{font-style:italic;font-weight:500;font-size:clamp(1.05rem,2.4vmin,1.4rem);color:var(--or-pale);margin:0;letter-spacing:.02em}
 .etat{font-family:"Cormorant SC",Garamond,serif;font-size:clamp(.85rem,1.9vmin,1.05rem);letter-spacing:.32em;color:var(--or);margin:0}
 @keyframes lever{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-@media (prefers-reduced-motion:reduce){figure,.titre{animation:none}}
+@media (prefers-reduced-motion:reduce){.titre{animation:none}}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 </style>
 </head>
 <body>
 <canvas id="fjord" aria-hidden="true"></canvas>
 <div class="voile" aria-hidden="true"></div>
 <main>
-  <figure><img src="carillon.jpg" width="1024" height="823" alt="Le drapeau Carillon-Sacré-Cœur : croix blanche sur fond bleu, quatre fleurs de lys blanches pointant vers le centre, Sacré-Cœur entouré de feuilles d'érable, bordure dorée"></figure>
+  <p class="sr">Le drapeau Carillon-Sacré-Cœur se lève dans le ciel du fjord du Saguenay, au crépuscule.</p>
   <div class="titre">
     <div class="orn" aria-hidden="true"><span>✦</span></div>
     <h1>Tokébac Icitte</h1>
@@ -48,6 +47,7 @@ h1{font-family:"Cormorant SC","Cormorant Garamond",Garamond,serif;font-weight:60
 /* Fjord du Saguenay au crépuscule : falaises qui se resserrent vers l'horizon, épinettes sur les crêtes, eau sombre et reflets. */
 (function(){
   const cv = document.getElementById('fjord'), ctx = cv.getContext('2d');
+  const flag = new Image(); flag.src = 'carillon.jpg';
   function rng(seed){ return () => { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }; }
   function mix(a, b, t){ const p = x => [1,3,5].map(i => parseInt(x.substr(i,2),16)); const A = p(a), B = p(b); return `rgb(${A.map((v,i)=>Math.round(v+(B[i]-v)*t)).join(',')})`; }
   function draw(){
@@ -63,6 +63,26 @@ h1{font-family:"Cormorant SC","Cormorant Garamond",Garamond,serif;font-weight:60
     glow.addColorStop(0,'rgba(236,190,120,.55)'); glow.addColorStop(1,'rgba(236,190,120,0)');
     ctx.fillStyle = glow; ctx.fillRect(0,0,W,hz);
     for (let i = 0; i < 140; i++){ const x = R()*W, y = R()*hz*.5, a = R()*.6; ctx.fillStyle = `rgba(255,248,230,${a*(1-y/(hz*.5))})`; ctx.fillRect(x,y,R()<.1?1.6:1,R()<.1?1.6:1); }
+
+    // Le drapeau, fondu dans le ciel entre les falaises
+    if (flag.complete && flag.naturalWidth){
+      const fw = Math.min(W*.62, hz*.95*1.244), fh = fw/1.244, fx = (W-fw)/2, fy = Math.max(H*.04, hz*.5 - fh*.55);
+      const off = document.createElement('canvas'); off.width = Math.round(fw*dpr); off.height = Math.round(fh*dpr);
+      const o = off.getContext('2d'); o.scale(dpr,dpr);
+      o.drawImage(flag, 0, 0, fw, fh);
+      o.globalCompositeOperation = 'destination-in';
+      const gx = o.createLinearGradient(0,0,fw,0);
+      gx.addColorStop(0,'rgba(0,0,0,0)'); gx.addColorStop(.1,'rgba(0,0,0,1)'); gx.addColorStop(.9,'rgba(0,0,0,1)'); gx.addColorStop(1,'rgba(0,0,0,0)');
+      o.fillStyle = gx; o.fillRect(0,0,fw,fh);
+      const gy = o.createLinearGradient(0,0,0,fh);
+      gy.addColorStop(0,'rgba(0,0,0,0)'); gy.addColorStop(.12,'rgba(0,0,0,1)'); gy.addColorStop(.82,'rgba(0,0,0,1)'); gy.addColorStop(1,'rgba(0,0,0,0)');
+      o.fillStyle = gy; o.fillRect(0,0,fw,fh);
+      o.globalCompositeOperation = 'source-atop';
+      const tint = o.createLinearGradient(0,0,0,fh);
+      tint.addColorStop(0,'rgba(10,18,45,.35)'); tint.addColorStop(1,'rgba(236,190,120,.18)');
+      o.fillStyle = tint; o.fillRect(0,0,fw,fh);
+      ctx.save(); ctx.globalAlpha = .82; ctx.drawImage(off, fx, fy, fw, fh); ctx.restore();
+    }
 
     // Couches de falaises : de la plus lointaine à la plus proche
     const layers = [
@@ -132,7 +152,7 @@ h1{font-family:"Cormorant SC","Cormorant Garamond",Garamond,serif;font-weight:60
     // grain léger
     for (let i = 0; i < (W*H)/900; i++){ ctx.fillStyle = `rgba(255,255,255,${R()*.035})`; ctx.fillRect(R()*W, R()*H, 1, 1); }
   }
-  let t; draw(); addEventListener('resize', () => { clearTimeout(t); t = setTimeout(draw, 150); });
+  let t; draw(); flag.onload = draw; addEventListener('resize', () => { clearTimeout(t); t = setTimeout(draw, 150); });
 })();
 </script>
 </body>
